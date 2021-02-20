@@ -5,34 +5,7 @@ from spotipy.oauth2 import SpotifyOAuth
 from dotenv import load_dotenv
 
 from SpotifyAlbum import SpotifyAlbum
-
-def get_released_albums(**kwargs):
-    albums = metallum.album_search(
-        title='',
-        strict=False,
-        year_from=kwargs.get('year', 2021),
-        year_to=kwargs.get('year', 2021),
-        month_from=kwargs.get('month', 1),
-        month_to=kwargs.get('month', 1),
-        genre='melodic death metal',
-        types=[1]
-    )
-
-    albums_dict = [
-        {
-            'artist': album.band_name,
-            'name': album.title,
-            'date': album._details[3][-14:-4],
-        } for album in albums
-    ]
-
-    print("Metal Archives results:")
-
-    for i in albums_dict:
-        print("[{name}] by [{artist}]".format(**i))
-
-    return albums_dict
-
+from get_released_albums import *
 
 def setup_spotify(**kwargs):
     CLIENT_ID = kwargs.get('client_id', os.getenv('SPOTIFY_CLIENT_ID'))
@@ -86,6 +59,7 @@ if __name__ == '__main__':
     current_user = spotify_api.me()
     month = input('Enter the month you want to query (1..12): ')
     year = input('Enter the year your want to query: ')
+    print("\nSearching albums on Metal Archives...")
     albums = get_released_albums(month=month, year=year)
     print('\nSearching albums on Spotify...')
     spotify_album_ids = [a for a in [get_spotify_album_id(album, spotify_api) for album in albums] if a is not None]

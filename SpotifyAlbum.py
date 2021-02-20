@@ -23,6 +23,7 @@ class SpotifyAlbum:
         self.main_artist = self.artists[0].get('name')
         self.name = details.get('name')
         self.release_date = details.get('release_date')
+        self.external_url = details.get('external_urls', {}).get('spotify')
         self.total_tracks = details.get('total_tracks')
         self.id = details.get('id')
         self.uri = details.get('uri')
