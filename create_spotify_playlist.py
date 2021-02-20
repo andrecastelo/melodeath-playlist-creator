@@ -80,9 +80,13 @@ MONTHS = [None, 'January', 'February', 'March', 'April', 'June', 'July', 'August
 
 if __name__ == '__main__':
     load_dotenv()
+    print('Welcome! We are going to setup spotify now, you will be redirected to log into your account')
+    print('Once that is done, copy the url you were redirected to and paste here')
     spotify_api = setup_spotify()
     current_user = spotify_api.me()
-    albums = get_released_albums(month=1)
+    month = input('Enter the month you want to query (1..12): ')
+    year = input('Enter the year your want to query: ')
+    albums = get_released_albums(month=month, year=year)
     print('\nSearching albums on Spotify...')
     spotify_album_ids = [a for a in [get_spotify_album_id(album, spotify_api) for album in albums] if a is not None]
     print('\nFetching more information about albums...')
