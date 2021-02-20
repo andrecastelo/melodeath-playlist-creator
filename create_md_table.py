@@ -35,8 +35,8 @@ if __name__ == '__main__':
     load_dotenv()
     spotify_api = setup_spotify()
 
-    print("Band | Album | Genre | Date")
-    print(":----|:------|:------|----:")
+    print("Band | Album | Genre | Date | Playlist")
+    print(":----|:------|:------|-----:|:--------")
     for a in albums:
         spotify_album = search_album(a, spotify_api)
 
