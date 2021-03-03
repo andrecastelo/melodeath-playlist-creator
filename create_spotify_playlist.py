@@ -36,11 +36,15 @@ def get_spotify_album_id(album, spotify_api):
         return None
 
 def get_spotify_albums(album_ids, spotify_api):
-    response = spotify_api.albums(album_ids)
+    MAX_ALBUM_IDS = 20
+    chunked_album_ids = [album_ids[i:i + MAX_ALBUM_IDS] for i in range(0, len(album_ids), MAX_ALBUM_IDS)]
+    albums_list = []
+    for albums in chunked_album_ids:
+        print("Fetching tracks for [{}] albums".format(len(albums)))
+        response = spotify_api.albums(albums)
+        albums_list = albums_list + [SpotifyAlbum(album) for album in response.get('albums')]
 
-    return [
-        SpotifyAlbum(album) for album in response.get('albums')
-    ]
+    return albums_list
 
 def get_track_ids(albums):
     tracks = []

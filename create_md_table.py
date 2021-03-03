@@ -31,7 +31,11 @@ def search_album(album, spotify_api):
 
 
 if __name__ == '__main__':
-    albums = get_released_albums(year=2021, month=1)
+    year = input('Year [2001]: ')
+    year = year if year else 2021
+    month = input('Month [1]: ')
+    month = month if month else 1
+    albums = get_released_albums(year=year, month=month)
     load_dotenv()
     spotify_api = setup_spotify()
 
