@@ -8,7 +8,7 @@ DEFAULT_SCOPES = "user-read-private,playlist-modify-public,playlist-read-private
 def setup_spotify(**kwargs):
     CLIENT_ID = kwargs.get("client_id", os.getenv("SPOTIFY_CLIENT_ID"))
     CLIENT_SECRET = kwargs.get("client_secret", os.getenv("SPOTIFY_CLIENT_SECRET"))
-    REDIRECT_URI = kwargs.get("redirect_uri", os.getenv("SPOTIFY_REDIRECT_URI"))
+    REDIRECT_URI = kwargs.get("redirect_uri", "http://localhost")
     scopes = kwargs.get("scopes", DEFAULT_SCOPES)
 
     return spotipy.Spotify(
