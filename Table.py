@@ -1,9 +1,12 @@
+from datetime import datetime
 from utils import parse_big_number
+
+sort_lambda = lambda album: datetime.strptime(album.get("date"), "%Y-%m-%d")
 
 
 class Table:
     def __init__(self, albums):
-        self.albums = albums
+        self.albums = sorted(albums, key=sort_lambda)
 
     def markdown(self):
         headers = [
