@@ -58,6 +58,7 @@ def main(
             spotify_album = search_album(album, spotify_api)
             if spotify_album:
                 album["spotify_album"] = spotify_album
+                album["date"] = spotify_album.release_date
 
     markdown_table = Table(albums)
     markdown_table.print_markdown()
