@@ -1,10 +1,18 @@
 import metallum
 from utils import get_months, get_years
+from datetime import date
 
 
-def assemble_params(params):
-    year_from, year_to = get_years(params)
-    month_from, month_to = get_months(params)
+def assemble_params(**kwargs):
+    year_from, year_to = get_years(kwargs)
+    month_from, month_to = get_months(kwargs)
+    today = date.today()
+
+    if year_to > today.year:
+        year_to = today.year
+
+    if month_to > today.month:
+        month_to = today.month - 1
 
     return dict(
         title="",
