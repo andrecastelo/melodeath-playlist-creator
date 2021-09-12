@@ -23,14 +23,20 @@ def assemble_params(**kwargs):
         month_to=month_to,
         genre="melodic death metal",
         types=[1],
+        page_start=kwargs.get("page_start", 0),
     )
 
 
 def get_released_albums(**kwargs):
-    params = assemble_params(kwargs)
-    print(params)
-
+    params = assemble_params(**kwargs)
     albums = metallum.album_search(**params)
+    result_count = albums.result_count
+    PAGE_LENGTH = 200
+
+    while len(albums) < result_count:
+        params["page_start"] += PAGE_LENGTH
+        new_search = metallum.album_search(**params)
+        albums += new_search
 
     return [
         {
