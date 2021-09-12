@@ -1,4 +1,6 @@
 from dotenv import load_dotenv
+from typing import Optional
+import typer
 
 from Table import Table
 from SpotifyAlbum import SpotifyAlbum
@@ -21,32 +23,45 @@ def search_album(album, spotify_api):
         return None
 
 
-def build_md_table(albums):
+start_date_help = "Starting date to query, format MM/YYYY"
+end_date_help = "End date, format MM/YYYY"
+
+
+def main(
+    start_date: str = typer.Argument(..., help=start_date_help),
+    end_date: Optional[str] = typer.Argument(None, help=end_date_help),
+):
+    month_from, year_from = start_date.split("/")
+    month_to, year_to = (
+        end_date.split("/")
+        if end_date
+        else (
+            month_from,
+            year_from,
+        )
+    )
+
+    typer.echo(f"Period: between {month_from}-{year_from} and {month_to}-{year_to}")
+    typer.echo("Fetching released albums for the period on Metal Archives...")
+    albums = get_released_albums(
+        month_from=month_from, month_to=month_to, year_from=year_from, year_to=year_to
+    )
+    typer.echo(f"Found [{len(albums)}] albums on Metal Archives")
+
+    typer.echo("Setting up Spotify API...")
+    load_dotenv()
+    spotify_api = setup_spotify()
+
+    typer.echo("Fetching album data on Spotify...")
+    with typer.progressbar(albums) as progress:
+        for album in progress:
+            spotify_album = search_album(album, spotify_api)
+            if spotify_album:
+                album["spotify_album"] = spotify_album
+
     markdown_table = Table(albums)
     markdown_table.print_markdown()
 
 
-def main_app():
-    year = input("Starting year [2021]: ")
-    year = year if year else 2021
-    month = input("Month [1]: ")
-    month = month if month else 1
-    print("Fetching released albums for the period on Metal Archives...")
-    albums = get_released_albums(year=year, month=month)
-
-    print("Loading environment...")
-    load_dotenv()
-
-    print("Setting up Spotify API...")
-    spotify_api = setup_spotify()
-
-    for album in albums:
-        spotify_album = search_album(album, spotify_api)
-        if spotify_album:
-            album["spotify_album"] = spotify_album
-
-    build_md_table(albums)
-
-
 if __name__ == "__main__":
-    main_app()
+    typer.run(main)

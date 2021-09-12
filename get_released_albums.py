@@ -20,6 +20,8 @@ def assemble_params(params):
 
 def get_released_albums(**kwargs):
     params = assemble_params(kwargs)
+    print(params)
+
     albums = metallum.album_search(**params)
 
     return [

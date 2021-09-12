@@ -1,3 +1,6 @@
+from utils import parse_big_number
+
+
 class Table:
     def __init__(self, albums):
         self.albums = albums
@@ -5,7 +8,7 @@ class Table:
     def markdown(self):
         headers = [
             "Band | Followers | Album | Genre | Date | Playlist",
-            ":----|:----------|:------|:------|-----:|:--------",
+            ":----|----------:|:------|:------|-----:|:--------",
         ]
         lines = [Table.format(album) for album in self.albums]
 
@@ -19,9 +22,15 @@ class Table:
         spotify_album = album.get("spotify_album")
 
         if spotify_album:
+            follower_count = (
+                parse_big_number(spotify_album.followers)
+                if spotify_album.followers
+                else "-"
+            )
+
             return "{artist} | {followers} | {name} | {genre} | {date} | {playlist}".format(
                 artist=spotify_album.main_artist.get("name"),
-                followers=spotify_album.followers if spotify_album.followers else "-",
+                followers=follower_count,
                 name=spotify_album.name,
                 genre=album.get("genre", "-"),
                 date=spotify_album.release_date,
