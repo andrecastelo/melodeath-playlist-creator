@@ -4,8 +4,8 @@ def get_years(arg):
     year_to = arg.get("year_to", year)
 
     return (
-        year_from,
-        year_to,
+        int(year_from),
+        int(year_to),
     )
 
 
@@ -15,8 +15,8 @@ def get_months(arg):
     month_to = arg.get("month_to", month)
 
     return (
-        month_from,
-        month_to,
+        int(month_from),
+        int(month_to),
     )
 
 
