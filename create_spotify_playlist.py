@@ -92,7 +92,6 @@ if __name__ == "__main__":
         playlist_name,
         public=True,
         collaborative=False,
-        description="Melodic Death Metal, Jan 2021",
     )
 
     spotify_tracks = get_track_ids(spotify_albums)

@@ -1,16 +1,12 @@
 import metallum
+from utils import get_months, get_years
 
 
-def get_released_albums(**kwargs):
-    year = kwargs.get("year", 2021)
-    year_from = kwargs.get("year_from", year)
-    year_to = kwargs.get("year_to", year)
+def assemble_params(params):
+    year_from, year_to = get_years(params)
+    month_from, month_to = get_months(params)
 
-    month = kwargs.get("month", 1)
-    month_from = kwargs.get("month_from", month)
-    month_to = kwargs.get("month_to", month)
-
-    albums = metallum.album_search(
+    return dict(
         title="",
         strict=False,
         year_from=year_from,
@@ -20,6 +16,11 @@ def get_released_albums(**kwargs):
         genre="melodic death metal",
         types=[1],
     )
+
+
+def get_released_albums(**kwargs):
+    params = assemble_params(kwargs)
+    albums = metallum.album_search(**params)
 
     return [
         {
