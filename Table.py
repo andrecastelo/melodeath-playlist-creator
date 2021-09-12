@@ -10,8 +10,8 @@ class Table:
 
     def markdown(self):
         headers = [
-            "Band | Followers | Album | Genre | Date | Playlist",
-            ":----|----------:|:------|:------|-----:|:--------",
+            "     | Band | Followers | Album | Genre | Playlist",
+            "|---:|:-----|----------:|:------|:------|:--------",
         ]
         lines = [Table.format(album) for album in self.albums]
 
@@ -19,6 +19,10 @@ class Table:
 
     def print_markdown(self):
         print("\n".join(self.markdown()))
+
+    @staticmethod
+    def format_date(date, format="%b %d"):
+        return datetime.strptime(date, "%Y-%m-%d").strftime(format)
 
     @staticmethod
     def format(album):
@@ -31,13 +35,18 @@ class Table:
                 else "-"
             )
 
-            return "{artist} | {followers} | {name} | {genre} | {date} | {playlist}".format(
+            return "{date} | {artist} | {followers} | {name} | {genre} | [link]({playlist})".format(
+                date=Table.format_date(spotify_album.release_date),
                 artist=spotify_album.main_artist.get("name"),
                 followers=follower_count,
                 name=spotify_album.name,
                 genre=album.get("genre", "-"),
-                date=spotify_album.release_date,
                 playlist=spotify_album.external_url,
             )
 
-        return "{artist} | - | {name} | {genre} | {date} | -".format(**album)
+        return "{date} | {artist} | - | {name} | {genre} | -".format(
+            date=Table.format_date(album.get("date")),
+            artist=album.get("artist"),
+            name=album.get("name"),
+            genre=album.get("genre"),
+        )
