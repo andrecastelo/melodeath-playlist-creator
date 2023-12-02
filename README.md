@@ -17,3 +17,5 @@ work fine.
 It's important to note that this is a personal project and not intended for
 any type of commercial use or even other people using, so you might run
 into some issues.
+
+You might need to install [python-lxml](https://formulae.brew.sh/formula/python-lxml).

@@ -1,8 +1,8 @@
 from dotenv import load_dotenv
 
-from SpotifyAlbum import SpotifyAlbum
-from setup_spotify import setup_spotify
 from get_released_albums import *
+from setup_spotify import setup_spotify
+from SpotifyAlbum import SpotifyAlbum
 
 
 def get_spotify_album_id(album, spotify_api):
@@ -21,16 +21,13 @@ def get_spotify_album_id(album, spotify_api):
 def get_spotify_albums(album_ids, spotify_api):
     MAX_ALBUM_IDS = 20
     chunked_album_ids = [
-        album_ids[i : i + MAX_ALBUM_IDS]
-        for i in range(0, len(album_ids), MAX_ALBUM_IDS)
+        album_ids[i : i + MAX_ALBUM_IDS] for i in range(0, len(album_ids), MAX_ALBUM_IDS)
     ]
     albums_list = []
     for albums in chunked_album_ids:
         print("Fetching tracks for [{}] albums".format(len(albums)))
         response = spotify_api.albums(albums)
-        albums_list = albums_list + [
-            SpotifyAlbum(album) for album in response.get("albums")
-        ]
+        albums_list = albums_list + [SpotifyAlbum(album) for album in response.get("albums")]
 
     return albums_list
 
@@ -58,7 +55,8 @@ MONTHS = [
     "December",
 ]
 
-if __name__ == "__main__":
+
+def main():
     load_dotenv()
     print(
         "Welcome! We are going to setup spotify now, you will be redirected to log into your account"
@@ -99,9 +97,12 @@ if __name__ == "__main__":
     # maximum number of tracks that can be added per request
     max_tracks = 100
     for tracks in [
-        spotify_tracks[i : i + max_tracks]
-        for i in range(0, len(spotify_tracks), max_tracks)
+        spotify_tracks[i : i + max_tracks] for i in range(0, len(spotify_tracks), max_tracks)
     ]:
         spotify_api.playlist_add_items(spotify_playlist.get("id"), tracks)
 
     print("\nDone! Check your spotify account")
+
+
+if __name__ == "__main__":
+    main()
